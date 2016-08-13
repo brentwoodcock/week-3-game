@@ -1,3 +1,33 @@
-h3{
-	letter-spacing: 5px;
+body{
+	background-image: url("../images/asfalt.png");
+	background-repeat: repeat;
+	font-family: 'Montserrat', sans-serif;
+}
+.jumbotron{
+	background: rgb(200, 54, 54);
+	background: rgba(200, 54, 54, 0);
+}
+#logo{
+	width: 100%;
+}
+#heroPhrase{
+	color: #ed4929;
+	padding-bottom: 30px;
+}
+#imgCol,
+#gameCol{
+	background-image: url("../images/mochaGrunge.png");
+	background-repeat: repeat;
+	border-style: dotted;
+	border-color: #c0201a;
+	border-width: 5px;
+	padding: 30px;
+	height: 600px;
+}
+#wins,
+#currentWord,
+#numGuesses,
+#lettersGuessed{
+	font-size: 18px;
+	letter-spacing: 10px;
 }

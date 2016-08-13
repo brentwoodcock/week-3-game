@@ -13,6 +13,9 @@
 	<!-- Bootstrap File -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+	<!-- Font -->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
 	<!-- Stylesheet -->
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
@@ -21,39 +24,45 @@
 
 <div class ="container">
 	<div class ="jumbotron">
-		<h1 class="text-center"><b>Dota 2 Hangman</b></h1>
+		<img src="assets/images/Logo.png" alt="Dota 2 Hangman" id="logo">
 
 	</div>
 
 	<div class="row">
+		<div class="col-md-12">
+		<h1 class="text-center" id="heroPhrase"></h1>
+		</div>
+	</div>
+
+	<div class="row">
 		
-		<div class="col-md-1">
+		<div class="col-md-2">
 		</div>
-		<div class="col-md-5">
-			<img src="assets/images/questionMark.jpg" alt="Question Mark" class="img-rounded center-block" width="256" height="144">
+		<div class="col-md-4" id="imgCol">
+			<img src="assets/images/questionMark.jpg" alt="Hero Image" class="img-rounded center-block" id="heroImage" width="256" height="144">
 		</div>
-		<div class="col-md-5">
+		<div class="col-md-4" id="gameCol">
 			<div class="row">
 				<h2 class="text-center">Press any key to get started!</h2>
 			</div>
 			<div class="row">
 				<h2 class="text-center">Wins<br></h2>
-				<h3 class="text-center" id="wins"></h3>
+				<div class="text-center" id="wins"></div>
 			</div>
 			<div class="row">
 				<h2 class="text-center">Current Word<br></h2>
-				<h3 class="text-center" id="currentWord"></h3>
+				<div class="text-center" id="currentWord"></div>
 			</div>
 			<div class="row">
 				<h2 class="text-center">Number of Guesses Remaining<br></h2>
-				<h3 class="text-center" id="numGuesses">12</h3>
+				<div class="text-center" id="numGuesses"></div>
 			</div>
 			<div class="row">
 				<h2 class="text-center">Letters Already Guessed<br></h2>
-				<h3 class="text-center" id="lettersGuessed"></h3>
+				<div class="text-center" id="lettersGuessed"></div>
 			</div>
 		</div>
-		<div class="col-md-1">
+		<div class="col-md-2">
 		</div>
 
 	</div>
@@ -71,10 +80,13 @@
 $(document).ready(function() {
 
 	var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+	var audioElement = document.createElement("audio");
+	audioElement.volume = 0.2;
 
 	game.pickWord();
 	$("#wins").html(game.wins);
 	$("#currentWord").html(game.displayedWord);
+	$("#numGuesses").html(game.numGuesses);
 
 	$(document).on("keyup", function(event){
 		var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
@@ -82,7 +94,19 @@ $(document).ready(function() {
 		if ((letters.indexOf(userGuess) != -1) && (game.numGuesses != 0) && ((game.guesses.indexOf(userGuess) == -1) || (game.answer.indexOf(userGuess) != -1))){
 			game.checkGuess(userGuess);
 			game.checkWin();
-			console.log(game.answer);
+			if (game.isWin == true){
+				$("#heroPhrase").html(game.phrase);
+				$("#heroImage").attr("src", game.imgSource);
+				audioElement.setAttribute("src", game.audioSource);
+				audioElement.play();
+				game.reset();
+			}else if((game.isWin == false) && (game.isOver == true)){
+				$("#heroPhrase").html("The correct answer was " + game.prevAnswer);
+				$("#heroImage").attr("src", "assets/images/loss.png");
+				audioElement.setAttribute("src", "https://hydra-media.cursecdn.com/dota2.gamepedia.com/c/ca/Ganked_sml_02.mp3");
+				audioElement.play();
+				game.reset();
+			}
 			$("#wins").html(game.wins);
 			$("#currentWord").html(game.displayedWord);
 			$("#numGuesses").html(game.numGuesses);
