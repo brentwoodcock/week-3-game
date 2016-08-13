@@ -30,7 +30,7 @@
 		<div class="col-md-1">
 		</div>
 		<div class="col-md-5">
-			<img src="assets/images/questionMark.jpg" alt="Question Mark" class="img-rounded" width="256" height="144">
+			<img src="assets/images/questionMark.jpg" alt="Question Mark" class="img-rounded center-block" width="256" height="144">
 		</div>
 		<div class="col-md-5">
 			<div class="row">
@@ -38,19 +38,19 @@
 			</div>
 			<div class="row">
 				<h2 class="text-center">Wins<br></h2>
-				<div class="text-center wins"></div>
+				<h3 class="text-center" id="wins"></h3>
 			</div>
 			<div class="row">
 				<h2 class="text-center">Current Word<br></h2>
-				<div class="text-center current-word"></div>
+				<h3 class="text-center" id="currentWord"></h3>
 			</div>
 			<div class="row">
 				<h2 class="text-center">Number of Guesses Remaining<br></h2>
-				<div class="text-center num-guesses"></div>
+				<h3 class="text-center" id="numGuesses">12</h3>
 			</div>
 			<div class="row">
 				<h2 class="text-center">Letters Already Guessed<br></h2>
-				<div class="text-center letters-guessed"></div>
+				<h3 class="text-center" id="lettersGuessed"></h3>
 			</div>
 		</div>
 		<div class="col-md-1">
@@ -70,14 +70,23 @@
 
 $(document).ready(function() {
 
-	var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+	var letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+	game.pickWord();
+	$("#wins").html(game.wins);
+	$("#currentWord").html(game.displayedWord);
 
 	$(document).on("keyup", function(event){
 		var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
 
-		if (letters.indexOf(userGuess) != -1){
-			console.log(game.wordBank);
-			game.play();
+		if ((letters.indexOf(userGuess) != -1) && (game.numGuesses != 0) && ((game.guesses.indexOf(userGuess) == -1) || (game.answer.indexOf(userGuess) != -1))){
+			game.checkGuess(userGuess);
+			game.checkWin();
+			console.log(game.answer);
+			$("#wins").html(game.wins);
+			$("#currentWord").html(game.displayedWord);
+			$("#numGuesses").html(game.numGuesses);
+			$("#lettersGuessed").html(game.guesses);
 		}
 		
 	});
